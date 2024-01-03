@@ -35,6 +35,7 @@ jobs:
         with:
             version: 0.11.0
       - run: zig build ${{matrix.args}}
+      - run: ls -l
       - name: Upload main binary to latest release
         uses: svenstaro/upload-release-action@v2
         with:
