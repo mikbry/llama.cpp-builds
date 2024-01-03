@@ -1,0 +1,19 @@
+name: Clone Llama.cpp Repository
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  clone_repository:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout LLama.cpp Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ggerganov/llama.cpp
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: llama.cpp
+

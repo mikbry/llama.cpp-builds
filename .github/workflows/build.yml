@@ -1,0 +1,24 @@
+name: LLama.cpp build test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  llamacpp-test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{matrix.os}}
+    steps:
+      - name: Checkout LLama.cpp Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ggerganov/llama.cpp
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: llama.cpp
+      - name: Setup Zig
+        uses: goto-bus-stop/setup-zig@v2
+      - run: zig build test
+
