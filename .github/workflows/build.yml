@@ -28,6 +28,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Zig
         uses: goto-bus-stop/setup-zig@v2
+        with:
+            version: 0.11.0
       - run: zig targets
       - run: zig build ${{matrix.settings.args}}
 
