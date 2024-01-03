@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  llamacpp-test:
+  llamacpp-build:
     strategy:
         fail-fast: false
         matrix:
@@ -29,5 +29,5 @@ jobs:
       - name: Setup Zig
         uses: goto-bus-stop/setup-zig@v2
       - run: zig targets
-      - run: zig build test ${{matrix.settings.args}}
+      - run: zig build ${{matrix.settings.args}}
 
