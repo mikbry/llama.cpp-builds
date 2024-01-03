@@ -42,10 +42,16 @@ jobs:
             file: zig-out/bin/main
             release_name: latest
             asset_name: llama.cpp${{ matrix.asset_extension }}
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+            tag: ${{ github.ref }}
+            overwrite: true
       - name: Upload server binary to latest release
         uses: svenstaro/upload-release-action@v2
         with:
             file: zig-out/bin/server
             release_name: latest
             asset_name: llama.cpp.server${{ matrix.asset_extension }}
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+            tag: ${{ github.ref }}
+            overwrite: true
 
