@@ -8,9 +8,18 @@ on:
 jobs:
   llamacpp-test:
     strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{matrix.os}}
+        fail-fast: false
+        matrix:
+          settings:
+            - platform: "macos-latest"
+              args: "-Doptimize=ReleaseFast -Dtarget=x86_64-macos-none -Dcpu=x86_64+avx2+fma+f16c"
+            - platform: "macos-latest"
+              args: "-Doptimize=ReleaseFast -Dtarget=aarch64-macos-none"
+            - platform: "ubuntu-20.04"
+              args: "-Doptimize=ReleaseFast -Dtarget=x86_64-linux-gnu -Dcpu=x86_64+avx2+fma+f16c"
+            - platform: "windows-latest"
+              args: "-Doptimize=ReleaseFast -Dtarget=x86_64-windows-gnu -Dcpu=x86_64+avx2+fma+f16c"
+    runs-on: ${{matrix.settings.platform}}
     steps:
       - name: Checkout LLama.cpp Repository
         uses: actions/checkout@v4
@@ -20,5 +29,5 @@ jobs:
       - name: Setup Zig
         uses: goto-bus-stop/setup-zig@v2
       - run: zig targets
-      - run: zig build test
+      - run: zig build test ${{matrix.settings.args}}
 
