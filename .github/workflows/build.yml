@@ -13,16 +13,20 @@ jobs:
           include:
             - platform: "macos-latest"
               args: "-Doptimize=ReleaseFast -Dtarget=x86_64-macos-none -Dcpu=x86_64+avx2+fma+f16c"
-              asset_extension: "-x86_64-apple-darwin"
+              file_extension: ""
+              asset_suffix: "-x86_64-apple-darwin"
             - platform: "macos-latest"
               args: "-Doptimize=ReleaseFast -Dtarget=aarch64-macos-none"
-              asset_extension: "-aarch64-apple-darwin"
+              file_extension: ""
+              asset_suffix: "-aarch64-apple-darwin"
             - platform: "ubuntu-20.04"
               args: "-Doptimize=ReleaseFast -Dtarget=x86_64-linux-gnu -Dcpu=x86_64+avx2+fma+f16c"
-              asset_extension: "-x86_64-unknown-linux-gnu"
+              file_extension: ""
+              asset_suffix: "-x86_64-unknown-linux-gnu"
             - platform: "windows-latest"
               args: "-Doptimize=ReleaseFast -Dtarget=x86_64-windows-gnu -Dcpu=x86_64+avx2+fma+f16c"
-              asset_extension: "x86_64-pc-windows-msvc.exe"
+              file_extension: ".exe"
+              asset_suffix: "x86_64-pc-windows-msvc"
     runs-on: ${{matrix.platform}}
     steps:
       - name: Checkout LLama.cpp Repository
@@ -39,19 +43,18 @@ jobs:
       - name: Upload main binary to latest release
         uses: svenstaro/upload-release-action@v2
         with:
-            file: zig-out/bin/main
+            file: zig-out/bin/main${{ matrix.file_extension }}
             release_name: latest
-            asset_name: llama.cpp${{ matrix.asset_extension }}
+            asset_name: llama.cpp${{ matrix.asset_suffix }}${{ matrix.file_extension }}
             repo_token: ${{ secrets.GITHUB_TOKEN }}
             tag: ${{ github.ref }}
             overwrite: true
       - name: Upload server binary to latest release
         uses: svenstaro/upload-release-action@v2
         with:
-            file: zig-out/bin/server
+            file: zig-out/bin/server${{ matrix.file_extension }}
             release_name: latest
-            asset_name: llama.cpp.server${{ matrix.asset_extension }}
+            asset_name: llama.cpp.server${{ matrix.asset_suffix }}${{ matrix.file_extension }}
             repo_token: ${{ secrets.GITHUB_TOKEN }}
             tag: ${{ github.ref }}
             overwrite: true
-
