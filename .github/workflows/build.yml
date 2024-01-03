@@ -10,26 +10,41 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-          settings:
+          include:
             - platform: "macos-latest"
               args: "-Doptimize=ReleaseFast -Dtarget=x86_64-macos-none -Dcpu=x86_64+avx2+fma+f16c"
+              asset_extension: "-x86_64-apple-darwin"
             - platform: "macos-latest"
               args: "-Doptimize=ReleaseFast -Dtarget=aarch64-macos-none"
+              asset_extension: "-aarch64-apple-darwin"
             - platform: "ubuntu-20.04"
               args: "-Doptimize=ReleaseFast -Dtarget=x86_64-linux-gnu -Dcpu=x86_64+avx2+fma+f16c"
+              asset_extension: "-x86_64-unknown-linux-gnu"
             - platform: "windows-latest"
               args: "-Doptimize=ReleaseFast -Dtarget=x86_64-windows-gnu -Dcpu=x86_64+avx2+fma+f16c"
-    runs-on: ${{matrix.settings.platform}}
+              asset_extension: "x86_64-pc-windows-msvc.exe"
+    runs-on: ${{matrix.platform}}
     steps:
       - name: Checkout LLama.cpp Repository
         uses: actions/checkout@v4
         with:
           repository: ggerganov/llama.cpp
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Setup Zig
+      - name: Setup Zig & Build LLama.cpp
         uses: goto-bus-stop/setup-zig@v2
         with:
             version: 0.11.0
-      - run: zig targets
-      - run: zig build ${{matrix.settings.args}}
+      - run: zig build ${{matrix.args}}
+      - name: Upload main binary to latest release
+        uses: svenstaro/upload-release-action@v2
+        with:
+            file: main
+            release_name: latest
+            asset_name: llama.cpp${{ matrix.asset_extension }}
+      - name: Upload server binary to latest release
+        uses: svenstaro/upload-release-action@v2
+        with:
+            file: server
+            release_name: latest
+            asset_name: llama.cpp.server${{ matrix.asset_extension }}
 
