@@ -1,9 +1,7 @@
-name: LLama.cpp build test
+name: LLama.cpp build
 
 on:
-  push:
-    branches:
-      - main
+    workflow_dispatch:
 
 jobs:
   llamacpp-build:
