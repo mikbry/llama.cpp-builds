@@ -32,8 +32,10 @@ jobs:
         with:
           repository: ggerganov/llama.cpp
           token: ${{ secrets.GITHUB_TOKEN }}
-      - run: ls ./
-      - run: cp build.zig ./llama.cpp
+      - name: make file
+        run: |
+          touch build.zig
+          cat "${{ github.action_path }}/build.zig" > build.zig
       - name: Setup Zig & Build LLama.cpp
         uses: goto-bus-stop/setup-zig@v2
         with:
