@@ -40,7 +40,10 @@ jobs:
           path: ./llama.cpp
 
       - name: copy build.zig
-        run: cp ./b/build.zig ./llama.cpp && cd ./llama.cpp
+        run: |
+          cp ./b/build.zig ./llama.cpp
+          cd ./llama.cpp
+          ls ./
       - name: Setup Zig & Build LLama.cpp
         uses: goto-bus-stop/setup-zig@v2
         with:
