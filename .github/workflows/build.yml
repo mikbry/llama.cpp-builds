@@ -39,16 +39,15 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: ./llama.cpp
 
-      - name: copy build.zig
-        run: |
-          cp ./b/build.zig ./llama.cpp
-          cd ./llama.cpp
-          ls ./
       - name: Setup Zig & Build LLama.cpp
         uses: goto-bus-stop/setup-zig@v2
         with:
             version: 0.11.0
-      - run: zig build ${{matrix.args}}
+      - run: |
+          cp ./b/build.zig ./llama.cpp
+          cd ./llama.cpp
+          ls ./
+          zig build ${{matrix.args}}
       - run: ls -l zig-out/bin
       - name: Upload main binary to latest release
         uses: svenstaro/upload-release-action@v2
