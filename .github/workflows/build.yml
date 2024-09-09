@@ -27,15 +27,18 @@ jobs:
               asset_suffix: "-x86_64-pc-windows-msvc"
     runs-on: ${{matrix.platform}}
     steps:
+      - name: Checkout LLama.cpp-builds Repository
+        uses: actions/checkout@v4
+        with:
+            path: ./b
+
       - name: Checkout LLama.cpp Repository
         uses: actions/checkout@v4
         with:
           repository: ggerganov/llama.cpp
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: make file
-        run: |
-          touch build.zig
-          cat "${{ github.action_path }}/build.zig" > build.zig
+      - name: copy build.zig
+        run: cp ./b/build.zig ./
       - name: Setup Zig & Build LLama.cpp
         uses: goto-bus-stop/setup-zig@v2
         with:
